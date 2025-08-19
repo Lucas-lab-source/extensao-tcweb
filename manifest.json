@@ -1,7 +1,7 @@
 {
   "title": "Controle de Versão Simplificado",
   "icon": "https://example.com/icon.png",
-  "url": "https://SEUUSUARIO.github.io/extensao-tcweb/controle-versao-simples.html",
+  "url": "https://lucas-lab-source.github.io/extensao-tcweb/controle-versao.html",
   "description": "Gera PDF com QR Code e verifica versões com mínimo de código",
   "configCommand": "abrir_config",
   "enabled": true,
@@ -19,3 +19,4 @@
     ]
   }
 }
+
