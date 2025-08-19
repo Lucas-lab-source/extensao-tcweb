@@ -1,8 +1,21 @@
 {
-  "title": "Controle de Versão de Plantas (Modal)",
+  "title": "Controle de Versão Simplificado",
   "icon": "https://example.com/icon.png",
-  "url": "https://example.com/controle-versao-modal.html",
-  "description": "Extensão que abre modal com opções de PDF e verificação",
+  "url": "https://SEUUSUARIO.github.io/extensao-tcweb/controle-versao-simples.html",
+  "description": "Gera PDF com QR Code e verifica versões com mínimo de código",
   "configCommand": "abrir_config",
-  "enabled": true
+  "enabled": true,
+  "menu": {
+    "title": "Controle de Versão",
+    "subMenus": [
+      {
+        "title": "Gerar PDF",
+        "command": "gerar_pdf"
+      },
+      {
+        "title": "Verificar QR Code",
+        "command": "verificar_qr"
+      }
+    ]
+  }
 }
