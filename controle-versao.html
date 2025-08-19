@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Controle de Versão de Plantas</title>
+  <script src="https://unpkg.com/trimble-connect-project-workspace-api"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h1>Controle de Versão de Plantas</h1>
+
+  <h2>Gerar PDF da planta com QR Code:</h2>
+  <button id="btnGerarPDF">Gerar PDF</button>
+
+  <h2>Verificar planta impressa:</h2>
+  <label>Digite ou escaneie o QR Code:</label>
+  <input type="text" id="qrInput" placeholder="Ex: projectID|versão">
+  <button id="btnVerificar">Verificar</button>
+
+  <canvas id="qrCode" style="display:none;"></canvas>
+
+  <script type="module">
+    import * as Extensions from "trimble-connect-project-workspace-api";
+    import { jsPDF } from "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+
+    async function iniciarExtensao() {
+      const API = await Extensions.connect(
+        window.parent,
+        (event, args) => {
+          if(event === "extension.command" && args.data === "abrir_config"){
+            alert("Abrindo configurações da extensão!");
+          }
+        },
+        30000
+      );
+
+      // Obter informações do projeto atual
+      const projectInfo = await API.project.getCurrentProject();
+      const versaoAtual = projectInfo.version || "1.0"; // fallback
+
+      // Gerar QR Code em canvas
+      const qr = new QRious({
+        element: document.getElementById('qrCode'),
+        value: projectInfo.id + "|" + versaoAtual,
+        size: 150
+      });
+
+      // Botão para gerar PDF
+      document.getElementById("btnGerarPDF").addEventListener("click", () => {
+        const pdf = new jsPDF();
+
+        // Adicionar título e versão
+        pdf.setFontSize(16);
+        pdf.text(`Projeto: ${projectInfo.name}`, 20, 20);
+        pdf.text(`Versão: ${versaoAtual}`, 20, 30);
+
+        // Adicionar QR Code no canto superior direito
+        const qrDataURL = qr.toDataURL();
+        pdf.addImage(qrDataURL, 'PNG', 160, 10, 40, 40);
+
+        // Salvar PDF
+        pdf.save(`${projectInfo.name}-versao.pdf`);
+      });
+
+      // Botão para verificar QR Code da planta impressa
+      document.getElementById("btnVerificar").addEventListener("click", () => {
+        const qrInput = document.getElementById("qrInput").value.trim();
+        if (!qrInput) {
+          alert("Digite ou escaneie o QR Code!");
+          return;
+        }
+
+        if (qrInput === projectInfo.id + "|" + versaoAtual) {
+          alert("✅ Planta está atualizada!");
+        } else {
+          alert("❌ Planta NÃO está atualizada!");
+        }
+      });
+    }
+
+    iniciarExtensao();
+  </script>
+</body>
+</html>

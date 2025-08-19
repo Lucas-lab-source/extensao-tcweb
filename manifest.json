@@ -1,0 +1,8 @@
+{
+"title": "Controle de Versão de Plantas",
+"icon": "https://example.com/icon.png",
+"url": "controle-versao.html",
+"description": "Gera PDF com QR Code e verifica versões de plantas impressas",
+"configCommand": "abrir_config",
+"enabled": true
+}
